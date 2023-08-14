@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 
-    List<Consulta> findFirst8ByDataConsultaOrderByDataConsultaAsc(LocalDate data);
+    List<Consulta> findFirst8ByDataOrderByDataAsc(LocalDate data);
 
-    boolean existsByDataConsulta(LocalDateTime data);
+    boolean existsByData(LocalDateTime data);
 
     @Query(value = "SELECT c FROM Consulta c WHERE c.paciente.cpf = :cpf",
     countQuery = "SELECT count(*) FROM Consulta c WHERE c.paciente.cpf = :cpf",

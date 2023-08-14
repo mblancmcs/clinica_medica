@@ -33,7 +33,7 @@ public class AgendamentoConsulta {
     public DadosListagemConsulta agendarNoDia(DadosCadastroConsulta dados) {
         Integer horaLivre = 0;
         Integer senha = 0;
-        List<Consulta> consultasDoDia = consultaRepository.findFirst8ByDataConsultaOrderByDataConsultaAsc(LocalDate.now());
+        List<Consulta> consultasDoDia = consultaRepository.findFirst8ByDataOrderByDataAsc(LocalDate.now());
 
         int horario = 8;
         for(Consulta consulta : consultasDoDia) {

@@ -14,7 +14,7 @@ public class ValidarHorarioLivre implements ValidarAgendamento {
 
     @Override
     public void validar(DadosCadastroConsulta dados) {
-        if(consultaRepository.existsByDataConsulta(dados.data())) {
+        if(consultaRepository.existsByData(dados.data())) {
             throw new ValidacaoException("Ja existe uma consulta agendada para essa data e horario");
         }
     }

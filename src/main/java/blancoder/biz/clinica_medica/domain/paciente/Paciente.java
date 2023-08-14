@@ -52,10 +52,6 @@ public class Paciente {
 
     }
 
-    public void exclusaoLogica() {
-        this.ativo = false;
-    }
-
     public void atualizarDados(DadosAtualizarPaciente dados) {
 
         if(dados.nome() != null) {
@@ -73,4 +69,9 @@ public class Paciente {
         }
 
     }
+
+    public void exclusaoLogica() {
+        this.ativo = false;
+    }
+
 }

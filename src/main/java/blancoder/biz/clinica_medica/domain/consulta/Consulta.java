@@ -20,6 +20,7 @@ public class Consulta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "data_consulta")
     private LocalDateTime data;
     private Integer senha;
     private String motivo;

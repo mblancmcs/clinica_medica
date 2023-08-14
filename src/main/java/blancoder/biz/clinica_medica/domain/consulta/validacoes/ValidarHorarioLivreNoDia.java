@@ -19,7 +19,7 @@ public class ValidarHorarioLivreNoDia {
 
     public void validar(DadosCadastroConsulta dados) {
         Integer horaLivre = 0;
-        List<Consulta> consultasDoDia = consultaRepository.findFirst8ByDataConsultaOrderByDataConsultaAsc(LocalDate.now());
+        List<Consulta> consultasDoDia = consultaRepository.findFirst8ByDataOrderByDataAsc(LocalDate.now());
 
         int horario = 8;
         for(Consulta consulta : consultasDoDia) {
