@@ -15,7 +15,7 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Value("api.security.token.secret") // indicando que vem do application.properties
+    @Value("clinica_medica.security.token.secret") // indicando que vem do application.properties
     private String secret;
 
     public String gerarToken(Usuario usuario) { // modificando do repositorio do auth0 do github

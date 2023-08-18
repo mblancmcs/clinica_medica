@@ -12,9 +12,9 @@ public record DadosCadastroConsulta(
         PlanosParticular planoParticular,
         @Future
         LocalDateTime data,
-        String senha,
+        Integer senha,
         @NotNull
-        Paciente paciente,
+        Integer idPaciente,
         @NotBlank
         String motivo
 ) {

@@ -2,6 +2,7 @@ package blancoder.biz.clinica_medica.controller;
 
 import blancoder.biz.clinica_medica.domain.ValidacaoException;
 import blancoder.biz.clinica_medica.domain.consulta.*;
+import blancoder.biz.clinica_medica.domain.paciente.PacienteRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ConsultaController {
 
     @Autowired
-    private ConsultaRepository repository;
+    private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private ConsultaRepository consultaRepository;
 
     @Autowired
     private AgendamentoConsulta agendamentoConsulta;
@@ -25,7 +29,8 @@ public class ConsultaController {
     @PostMapping
     @Transactional
     public ResponseEntity agendarAntecipado(@RequestBody @Valid DadosCadastroConsulta dados, UriComponentsBuilder uriBuilder) {
-        var agendamento = agendamentoConsulta.agendarAntecipado(dados);
+        var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
+        var agendamento = agendamentoConsulta.agendarAntecipado(dados, paciente);
         var uri = uriBuilder.path("/consulta/{id}").buildAndExpand(agendamento.id()).toUri();
         return ResponseEntity.created(uri).body(agendamento);
     }
@@ -39,22 +44,22 @@ public class ConsultaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "nome") Pageable paginacao) {
-        var pagConsulta = repository.findAll(paginacao).map(DadosListagemConsulta::new);
+    public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "data") Pageable paginacao) {
+        var pagConsulta = consultaRepository.findAll(paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Page<DadosListagemConsulta>> listarByCpf(@PageableDefault(size = 10, sort = "nome") Pageable paginacao,
+    public ResponseEntity<Page<DadosListagemConsulta>> listarByCpf(@PageableDefault(size = 10, sort = "data") Pageable paginacao,
                                                                    @PathVariable Long cpf) {
-        var pagConsulta = repository.findAllByCpf(cpf, paginacao).map(DadosListagemConsulta::new);
+        var pagConsulta = consultaRepository.findAllByCpf(cpf, paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizarConsulta dados) {
-        var consulta = repository.getReferenceById(dados.id());
+        var consulta = consultaRepository.getReferenceById(dados.id());
         if(consulta == null) {
             throw new ValidacaoException("Consulta inexistente");
         }
@@ -65,7 +70,7 @@ public class ConsultaController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {
-        var consulta = repository.getReferenceById(id);
+        var consulta = consultaRepository.getReferenceById(id);
         if(consulta == null) {
             throw new ValidacaoException("Consulta inexistente");
         }

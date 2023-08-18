@@ -12,7 +12,10 @@ import java.util.List;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 
-    List<Consulta> findFirst8ByDataOrderByDataAsc(LocalDate data);
+    @Query("""
+            SELECT c FROM Consulta c WHERE DATE(data) = :data ORDER BY data ASC
+            """)
+    List<Consulta> consultasDoDia(LocalDate data);
 
     boolean existsByData(LocalDateTime data);
 

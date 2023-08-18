@@ -36,23 +36,23 @@ public class PacienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity listarById(@PathVariable Integer id) {
-        var paciente = repository.getReferenceById(id);
-        if(paciente != null) {
+        if(repository.existsById(id)) {
+            var paciente = repository.getReferenceById(id);
             return ResponseEntity.ok(new DadosListagemPaciente(paciente));
         } else {
-            return ResponseEntity.badRequest().body("{error: 'Paciente nao encontrado'}");
+            return ResponseEntity.badRequest().body("Paciente nao encontrado");
         }
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizarPaciente dados) {
-        var paciente = repository.getReferenceById(dados.id());
-        if(paciente != null) {
+        if(repository.existsById(dados.id())) {
+            var paciente = repository.getReferenceById(dados.id());
             paciente.atualizarDados(dados);
             return ResponseEntity.ok(new DadosListagemPaciente(paciente));
         } else {
-            return ResponseEntity.badRequest().body("{error: 'Paciente nao encontrado'}");
+            return ResponseEntity.badRequest().body("Paciente nao encontrado");
         }
     }
 
@@ -64,7 +64,7 @@ public class PacienteController {
             paciente.exclusaoLogica();
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.badRequest().body("{error: 'Paciente nao encontrado'}");
+            return ResponseEntity.badRequest().body("Paciente nao encontrado");
         }
     }
 }

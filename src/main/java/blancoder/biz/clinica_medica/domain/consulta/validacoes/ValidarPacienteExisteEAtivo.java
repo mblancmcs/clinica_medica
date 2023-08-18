@@ -7,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidarPacienteExiste implements ValidarAgendamento {
+public class ValidarPacienteExisteEAtivo implements ValidarAgendamento {
 
     @Autowired
     private PacienteRepository pacienteRepository;
 
     @Override
     public void validar(DadosCadastroConsulta dados) {
-        if(!pacienteRepository.existsById(dados.paciente().getId())) {
-            throw new ValidacaoException("Paciente nao existe");
+        if(!pacienteRepository.existsByIdAndAtivoTrue(dados.idPaciente())) {
+            throw new ValidacaoException("Paciente nao encontrado ou inativo");
         }
     }
 

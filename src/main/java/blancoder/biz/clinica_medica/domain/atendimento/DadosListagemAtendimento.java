@@ -9,10 +9,10 @@ public record DadosListagemAtendimento(
         String receitaRemedios,
         String solicitacaoRetorno,
         String complemento,
-        Consulta consulta
+        Integer idConsulta
 ) {
     public DadosListagemAtendimento(Atendimento atendimento) {
         this(atendimento.getId(), atendimento.getDiagnostico(), atendimento.getReceitaRemedios(),
-                atendimento.getSolicitacaoRetorno(), atendimento.getComplemento(), atendimento.getConsulta());
+                atendimento.getSolicitacaoRetorno(), atendimento.getComplemento(), atendimento.getConsulta().getId());
     }
 }

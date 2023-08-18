@@ -27,14 +27,15 @@ public class Paciente {
     private LocalDate dataNascimento;
     private Boolean ativo;
 
-//    @Convert(converter = StringListConverter.class)
-//    @Column(name = "telefone", nullable = false)
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "telefone", nullable = false)
     private List<String> telefone = new ArrayList<>();
 
     public Paciente(DadosCadastroPaciente dados) {
         this.cpf = dados.cpf();
         this.nome = dados.nome();
         this.dataNascimento = dados.dataNascimento();
+        this.ativo = true;
         adicionarListaTelefone(dados.telefone());
     }
 
