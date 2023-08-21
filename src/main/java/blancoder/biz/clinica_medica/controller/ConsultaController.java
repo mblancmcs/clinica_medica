@@ -45,14 +45,14 @@ public class ConsultaController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "data") Pageable paginacao) {
-        var pagConsulta = consultaRepository.findAll(paginacao).map(DadosListagemConsulta::new);
+        var pagConsulta = consultaRepository.findAllByAtivoTrue(paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
     @GetMapping("/{cpf}")
     public ResponseEntity<Page<DadosListagemConsulta>> listarByCpf(@PageableDefault(size = 10, sort = "data") Pageable paginacao,
                                                                    @PathVariable Long cpf) {
-        var pagConsulta = consultaRepository.findAllByCpf(cpf, paginacao).map(DadosListagemConsulta::new);
+        var pagConsulta = consultaRepository.findAllByPacienteCpf(cpf, paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 

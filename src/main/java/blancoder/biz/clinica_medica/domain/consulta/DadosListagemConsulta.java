@@ -10,10 +10,11 @@ public record DadosListagemConsulta(
         LocalDateTime data,
         Integer senha,
         PlanosParticular planoParticular,
+        String motivo,
         DadosListagemPaciente dadosPaciente
 ) {
 
     public DadosListagemConsulta(Consulta consulta) {
-        this(consulta.getId(), consulta.getData(), consulta.getSenha(), consulta.getPlanoParticular(), consulta.informacoesPaciente());
+        this(consulta.getId(), consulta.getData(), consulta.getSenha(), consulta.getPlanoParticular(), consulta.getMotivo(), consulta.informacoesPaciente());
     }
 }

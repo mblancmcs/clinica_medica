@@ -1,13 +1,14 @@
 package blancoder.biz.clinica_medica.domain.atendimento;
 
 import blancoder.biz.clinica_medica.domain.consulta.Consulta;
+import blancoder.biz.clinica_medica.domain.consulta.DadosListagemConsulta;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "Atendimento")
 @Table(name = "atendimentos")
 @Getter
 @NoArgsConstructor
@@ -45,6 +46,10 @@ public class Atendimento {
 
     public void exclusaoLogica() {
         this.ativo = false;
+    }
+
+    public DadosListagemConsulta informacoesConsulta() {
+        return new DadosListagemConsulta(this.consulta);
     }
 
 }

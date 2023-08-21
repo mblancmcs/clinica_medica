@@ -22,15 +22,15 @@ public class AtendimentoController {
     private AtendimentoRepository repository;
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemAtendimento>> listar(@PageableDefault(size = 10, sort = "nome") Pageable paginacao) {
-        var pagAtendimento = repository.findAll(paginacao).map(DadosListagemAtendimento::new);
+    public ResponseEntity<Page<DadosListagemAtendimento>> listar(@PageableDefault(size = 10, sort = "id") Pageable paginacao) {
+        var pagAtendimento = repository.findAllByAtivoTrue(paginacao).map(DadosListagemAtendimento::new);
         return ResponseEntity.ok(pagAtendimento);
     }
 
     @GetMapping("/{cpf}")
     public ResponseEntity<Page<DadosListagemAtendimento>> listarByCpf(@PathVariable Long cpf, @PageableDefault(size = 10,
     sort = "id", direction = Sort.Direction.ASC) Pageable paginacao) {
-        var pagAtendimento = repository.antendimentosPorCpf(cpf, paginacao).map(DadosListagemAtendimento::new);
+        var pagAtendimento = repository.findAllByConsultaPacienteCpfAndAtivoTrue(cpf, paginacao).map(DadosListagemAtendimento::new);
         return ResponseEntity.ok(pagAtendimento);
     }
 

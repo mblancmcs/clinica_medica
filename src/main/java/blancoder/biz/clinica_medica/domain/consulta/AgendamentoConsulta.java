@@ -31,7 +31,7 @@ public class AgendamentoConsulta {
     private List<ValidarAgendamento> validacoes;
 
     public DadosListagemConsulta agendarAntecipado(@Valid DadosCadastroConsulta dados, Paciente paciente) {
-        validacoes.forEach(v -> v.validar(dados)); // fazer mais algumas validacoes, de: horarios de almoco e dentro do horario possivel
+        validacoes.forEach(v -> v.validar(dados));
         var consulta = new Consulta(dados, paciente);
         consultaRepository.save(consulta);
         return new DadosListagemConsulta(consulta);
@@ -63,6 +63,9 @@ public class AgendamentoConsulta {
             // passando os horarios em ordem cronologica referente as consultas agendadas
             for(Consulta consulta : consultasDoDia) {
                 vetHorariosPreenchidos[contador] = consulta.getData().getHour();
+                if(consulta.getSenha() != null) {
+                    senha = consulta.getSenha();
+                }
                 contador++;
             }
             contador = 0;
@@ -99,7 +102,8 @@ public class AgendamentoConsulta {
         }
 
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
-        var consulta = new Consulta(null, LocalDateTime.now().withHour(horaLivre).withMinute(minutos), senha, dados.motivo(), true,
+        var consulta = new Consulta(null, LocalDateTime.now().withHour(horaLivre).withMinute(minutos).withSecond(0),
+                senha, dados.motivo(), true,
                 dados.planoParticular(), paciente);
         var atendimento = new Atendimento(null, null, null, null, null,  true, consulta);
 

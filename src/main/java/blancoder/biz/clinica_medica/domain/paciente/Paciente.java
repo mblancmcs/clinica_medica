@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-@Entity
+@Entity(name = "Paciente")
 @Table(name = "pacientes")
 @Getter
 @AllArgsConstructor
@@ -65,8 +66,8 @@ public class Paciente {
             this.dataNascimento = dados.dataNascimento();
         }
         if(dados.telefone() != null) {
-            this.telefone = null;
-            adicionarListaTelefone(dados.telefone());
+            String[] listaTelefones = dados.telefone().split(";");
+            this.telefone = Arrays.asList(listaTelefones);
         }
 
     }

@@ -60,7 +60,7 @@ public class PacienteController {
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {
         var paciente = repository.getReferenceById(id);
-        if(paciente.getAtivo() == true) {
+        if(paciente != null && paciente.getAtivo() == true) {
             paciente.exclusaoLogica();
             return ResponseEntity.noContent().build();
         } else {
