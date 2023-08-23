@@ -1,4 +1,4 @@
 package blancoder.biz.clinica_medica.domain.usuario;
 
-public record DadosAutenticacao(String login, String senha) {
+public record DadosAutenticacao(String login, String password) {
 }

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest // subindo o contexto completo do Spring para simular uma classe controller
 @AutoConfigureMockMvc // para injetar o MockMvc
-@AutoConfigureJsonTesters // para injetar o JacksonTester, e facilitar o envio e recebimento de jsons)
+@AutoConfigureJsonTesters // para injetar o JacksonTester, e facilitar o envio e recebimento de jsons
 class ConsultaControllerTest {
 
     // teste de unidade - mocks para testar o controller de forma isolada
@@ -51,7 +51,7 @@ class ConsultaControllerTest {
 
     @Test
     @DisplayName("Deve devolver o codigo 400 quando houver informacoes invalidas")
-    @WithMockUser // simulando um usuario logado para o Spring Security
+    @WithMockUser(roles = {"ATENDENTE"}) // simulando um usuario logado para o Spring Security
     void agendarCenario1() throws Exception {
         var response = mockMvc.perform(post("/consulta"))
                 .andReturn().getResponse();
@@ -61,7 +61,7 @@ class ConsultaControllerTest {
 
     @Test
     @DisplayName("Deve devolver o codigo 201 quando o agendamento antecipado for valido")
-    @WithMockUser
+    @WithMockUser(roles = {"ATENDENTE"})
     void agendarCenario2() throws Exception {
         var planosParticular = PlanosParticular.PARTICULAR;
         // mudar abaixo de acordo com o horario da consulta esperado
@@ -97,7 +97,7 @@ class ConsultaControllerTest {
 
     @Test
     @DisplayName("Deve devolver o codigo 201 quando o agendamento no dia for valido")
-    @WithMockUser
+    @WithMockUser(roles = {"ATENDENTE"})
     void agendarCenario3() throws Exception {
         var planosParticular = PlanosParticular.UNIMED;
         // mudar abaixo de acordo com o horario da consulta esperado

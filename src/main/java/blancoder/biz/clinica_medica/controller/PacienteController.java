@@ -1,18 +1,21 @@
 package blancoder.biz.clinica_medica.controller;
 
 import blancoder.biz.clinica_medica.domain.paciente.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/paciente")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
     @Autowired
@@ -34,6 +37,7 @@ public class PacienteController {
         return ResponseEntity.ok(page);
     }
 
+    @Secured("ROLE_ATENDENTE")
     @GetMapping("/{id}")
     public ResponseEntity listarById(@PathVariable Integer id) {
         if(repository.existsById(id)) {
@@ -56,6 +60,7 @@ public class PacienteController {
         }
     }
 
+    @Secured("ROLE_ATENDENTE")
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {

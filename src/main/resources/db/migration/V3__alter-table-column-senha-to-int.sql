@@ -1,1 +1,0 @@
-ALTER TABLE consultas CHANGE senha senha int null;

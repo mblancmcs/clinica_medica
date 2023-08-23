@@ -18,13 +18,13 @@ public class TokenService {
     @Value("clinica_medica.security.token.secret") // indicando que vem do application.properties
     private String secret;
 
-    public String gerarToken(Usuario usuario) { // modificando do repositorio do auth0 do github
+    public String gerarToken(Usuario usuario) { // modificando do repositorio auth0 do github
         try {
             var algoritmo = Algorithm.HMAC256(secret); // modificando para criptografar com a HMA256
             return JWT.create()
-                    .withIssuer("API clinica medica") // autor / quem esta gerando o token
+                    .withIssuer("api-clinica-medica") // autor / quem esta gerando o token
                     .withSubject(usuario.getLogin()) // passando / armazenando o usuario que esta fazendo o login
-                    .withClaim("id", usuario.getId()) // opcional, mas enviando o id tambem
+                    //.withClaim("id", usuario.getId()) // opcional, para enviar o que for necessario
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){
@@ -38,7 +38,7 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer("API clinica medica")
+                    .withIssuer("api-clinica-medica")
                     .build()
                     .verify(tokenJWT) // verifica de acordo com o algoritmo e o Issuer configurado ao gerar o token
                     .getSubject();
@@ -48,7 +48,7 @@ public class TokenService {
 
     }
 
-    private Instant dataExpiracao() { // 2 horas de acordo com o fuso horario
+    private Instant dataExpiracao() { // 2 horas, porem considerar a localizacao
 
         return LocalDateTime.now()
                 .plusHours(2)

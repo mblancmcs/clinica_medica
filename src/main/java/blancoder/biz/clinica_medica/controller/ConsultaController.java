@@ -3,18 +3,23 @@ package blancoder.biz.clinica_medica.controller;
 import blancoder.biz.clinica_medica.domain.ValidacaoException;
 import blancoder.biz.clinica_medica.domain.consulta.*;
 import blancoder.biz.clinica_medica.domain.paciente.PacienteRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/consulta")
+@SecurityRequirement(name = "bearer-key")
+@Secured("ROLE_ATENDENTE")
 public class ConsultaController {
 
     @Autowired
@@ -44,14 +49,15 @@ public class ConsultaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "data") Pageable paginacao) {
+    public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                                  Pageable paginacao) {
         var pagConsulta = consultaRepository.findAllByAtivoTrue(paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Page<DadosListagemConsulta>> listarByCpf(@PageableDefault(size = 10, sort = "data") Pageable paginacao,
-                                                                   @PathVariable Long cpf) {
+    public ResponseEntity<Page<DadosListagemConsulta>> listarByCpf(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                                       Pageable paginacao, @PathVariable Long cpf) {
         var pagConsulta = consultaRepository.findAllByPacienteCpf(cpf, paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }

@@ -33,7 +33,9 @@ public class AgendamentoConsulta {
     public DadosListagemConsulta agendarAntecipado(@Valid DadosCadastroConsulta dados, Paciente paciente) {
         validacoes.forEach(v -> v.validar(dados));
         var consulta = new Consulta(dados, paciente);
+        var atendimento = new Atendimento(null, null, null, null, null,  true, consulta);
         consultaRepository.save(consulta);
+        atendimentoRepository.save(atendimento);
         return new DadosListagemConsulta(consulta);
     }
 
@@ -102,7 +104,7 @@ public class AgendamentoConsulta {
         }
 
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
-        var consulta = new Consulta(null, LocalDateTime.now().withHour(horaLivre).withMinute(minutos).withSecond(0),
+        var consulta = new Consulta(null, LocalDateTime.now().withHour(horaLivre).withMinute(minutos).withSecond(0).withNano(0),
                 senha, dados.motivo(), true,
                 dados.planoParticular(), paciente);
         var atendimento = new Atendimento(null, null, null, null, null,  true, consulta);

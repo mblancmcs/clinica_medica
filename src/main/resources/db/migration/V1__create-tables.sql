@@ -29,6 +29,6 @@ CREATE TABLE atendimentos (
 CREATE TABLE usuarios (
 	id int not null auto_increment primary key,
     login varchar(30) not null unique,
-    senha varchar(255) not null,
-    perfil varchar(30) not null default 'USER'
-)
+    password varchar(255) not null,
+    role varchar(30) not null
+);

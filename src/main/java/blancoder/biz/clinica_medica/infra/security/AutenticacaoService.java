@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-// implementando a interface, para indicar que sera essa a classe chamada para realizar o servico de autenticacao
+// implementando essa interface, para indicar que sera essa a classe chamada para realizar o servico de autenticacao
 public class AutenticacaoService implements UserDetailsService {
 
     @Autowired

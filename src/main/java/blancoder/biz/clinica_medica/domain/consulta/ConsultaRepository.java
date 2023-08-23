@@ -19,9 +19,6 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 
     boolean existsByData(LocalDateTime data);
 
-//    @Query(value = "SELECT c FROM Consulta c WHERE c.paciente.cpf = :cpf",
-//            countQuery = "SELECT count(*) FROM Consulta c WHERE c.paciente.cpf = :cpf",
-//            nativeQuery = true)
     Page<Consulta> findAllByPacienteCpf(Long cpf, Pageable paginacao);
 
     Page<Consulta> findAllByAtivoTrue(Pageable paginacao);

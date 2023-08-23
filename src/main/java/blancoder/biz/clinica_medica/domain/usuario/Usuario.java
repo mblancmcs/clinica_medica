@@ -24,23 +24,32 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String login;
-    private String senha;
-    private String perfil;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    public Usuario(String login, String password, UserRole role) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // simulando perfis inicialmente apenas para compilar o projeto
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                new SimpleGrantedAuthority("ROLE_MEDICO"), new SimpleGrantedAuthority("ROLE_ATENDENTE"));
+        else if(this.role == UserRole.MEDICO) return List.of(new SimpleGrantedAuthority("ROLE_MEDICO"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_ATENDENTE"));
     }
 
     @Override
     public String getPassword() {
-        return senha;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return this.login;
     }
 
     @Override
