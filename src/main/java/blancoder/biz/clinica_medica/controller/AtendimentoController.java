@@ -26,7 +26,7 @@ public class AtendimentoController {
     private AtendimentoRepository repository;
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemAtendimento>> listar(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+    public ResponseEntity<Page<DadosListagemAtendimento>> listar(@PageableDefault(size = 10, sort = "consulta.data", direction = Sort.Direction.ASC)
                                                                      Pageable paginacao) {
         var pagAtendimento = repository.findAllByAtivoTrue(paginacao).map(DadosListagemAtendimento::new);
         return ResponseEntity.ok(pagAtendimento);
