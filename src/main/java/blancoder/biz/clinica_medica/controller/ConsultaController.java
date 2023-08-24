@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +16,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/consulta")
@@ -36,7 +39,7 @@ public class ConsultaController {
     public ResponseEntity agendarAntecipado(@RequestBody @Valid DadosCadastroConsulta dados, UriComponentsBuilder uriBuilder) {
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
         var agendamento = agendamentoConsulta.agendarAntecipado(dados, paciente);
-        var uri = uriBuilder.path("/consulta/{id}").buildAndExpand(agendamento.id()).toUri();
+        var uri = uriBuilder.path("/consulta/id={id}").buildAndExpand(agendamento.id()).toUri();
         return ResponseEntity.created(uri).body(agendamento);
     }
 
@@ -44,7 +47,7 @@ public class ConsultaController {
     @Transactional
     public ResponseEntity agendarMesmoDia(@RequestBody @Valid DadosCadastroConsulta dados, UriComponentsBuilder uriBuilder) {
         var agendamento = agendamentoConsulta.agendarNoDia(dados);
-        var uri = uriBuilder.path("/consulta/{id}").buildAndExpand(agendamento.id()).toUri();
+        var uri = uriBuilder.path("/consulta/id={id}").buildAndExpand(agendamento.id()).toUri();
         return ResponseEntity.created(uri).body(agendamento);
     }
 
@@ -55,10 +58,21 @@ public class ConsultaController {
         return ResponseEntity.ok(pagConsulta);
     }
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<Page<DadosListagemConsulta>> listarByCpf(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+    @GetMapping("/cpf={cpf}")
+    public ResponseEntity<Page<DadosListagemConsulta>> listarPorCpf(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
                                                                        Pageable paginacao, @PathVariable Long cpf) {
         var pagConsulta = consultaRepository.findAllByPacienteCpf(cpf, paginacao).map(DadosListagemConsulta::new);
+        return ResponseEntity.ok(pagConsulta);
+    }
+
+    @GetMapping("/data={data}")
+    public ResponseEntity<Page<DadosListagemConsulta>> listarPorData(@PageableDefault(size = 10, sort = "data", direction = Sort.Direction.ASC)
+                                                                      Pageable paginacao, @PathVariable LocalDate data) {
+        // convertendo de List<Consulta> para Page<DadosListagemConsulta>
+        var consultasDoDia = consultaRepository.consultasDoDia(data);
+        int start = (int) paginacao.getOffset();
+        int end = Math.min((start + paginacao.getPageSize()), consultasDoDia.size());
+        Page<DadosListagemConsulta> pagConsulta = new PageImpl<>(consultasDoDia.subList(start, end), paginacao, consultasDoDia.size()).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
@@ -73,7 +87,7 @@ public class ConsultaController {
         return ResponseEntity.ok(new DadosListagemConsulta(consulta));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id={id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {
         var consulta = consultaRepository.getReferenceById(id);

@@ -41,8 +41,8 @@ public class AutenticacaoController {
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT)); // DTO para retornar com o json a chave "token"
     }
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO dados) {
+    @PostMapping("/registrar")
+    public ResponseEntity registrar(@RequestBody @Valid RegisterDTO dados) {
         if(usuarioRepository.findByLogin(dados.login()) != null) return ResponseEntity.badRequest().build();
 
         String senhaCriptografada = new BCryptPasswordEncoder().encode(dados.password());

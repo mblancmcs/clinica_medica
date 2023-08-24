@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // modificando a autenticacao para STATELESS
                 .authorizeHttpRequests(req -> { // metodo para configurar como vai ser a configuracao das requisicoes
                     req.requestMatchers(HttpMethod.POST, "/auth/login").permitAll(); // permitindo o acesso a requisicao de login e para o Spring Docs sem estar logado
-                    req.requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/auth/registrar").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.GET, "/auth/listar").hasRole("ADMIN");
                     req.requestMatchers("/paciente").hasRole("ATENDENTE");
                     req.requestMatchers("/consulta").hasRole("ATENDENTE");

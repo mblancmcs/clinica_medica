@@ -27,7 +27,7 @@ public class PacienteController {
         var paciente = new Paciente(dados);
         repository.save(paciente);
 
-        var uri = uriBuilder.path("/paciente/{id}").buildAndExpand(paciente.getId()).toUri();
+        var uri = uriBuilder.path("/paciente/id={id}").buildAndExpand(paciente.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosListagemPaciente(paciente));
     }
 
@@ -38,8 +38,8 @@ public class PacienteController {
     }
 
     @Secured("ROLE_ATENDENTE")
-    @GetMapping("/{id}")
-    public ResponseEntity listarById(@PathVariable Integer id) {
+    @GetMapping("/id={id}")
+    public ResponseEntity listarPorId(@PathVariable Integer id) {
         if(repository.existsById(id)) {
             var paciente = repository.getReferenceById(id);
             return ResponseEntity.ok(new DadosListagemPaciente(paciente));
@@ -61,7 +61,7 @@ public class PacienteController {
     }
 
     @Secured("ROLE_ATENDENTE")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id={id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {
         var paciente = repository.getReferenceById(id);

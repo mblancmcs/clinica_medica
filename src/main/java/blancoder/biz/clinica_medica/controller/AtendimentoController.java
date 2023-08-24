@@ -32,8 +32,8 @@ public class AtendimentoController {
         return ResponseEntity.ok(pagAtendimento);
     }
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<Page<DadosListagemAtendimento>> listarByCpf(@PathVariable Long cpf, @PageableDefault(size = 10,
+    @GetMapping("/cpf={cpf}")
+    public ResponseEntity<Page<DadosListagemAtendimento>> listarPorCpf(@PathVariable Long cpf, @PageableDefault(size = 10,
     sort = "id", direction = Sort.Direction.DESC) Pageable paginacao) {
         var pagAtendimento = repository.findAllByConsultaPacienteCpfAndAtivoTrue(cpf, paginacao).map(DadosListagemAtendimento::new);
         return ResponseEntity.ok(pagAtendimento);
@@ -50,7 +50,7 @@ public class AtendimentoController {
         return ResponseEntity.ok(new DadosListagemAtendimento(atendimento));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id={id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {
         var atendimento = repository.getReferenceById(id);

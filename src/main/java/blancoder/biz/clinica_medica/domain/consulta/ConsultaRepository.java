@@ -13,7 +13,7 @@ import java.util.List;
 public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 
     @Query("""
-            SELECT c FROM Consulta c WHERE DATE(data) = :data ORDER BY data ASC
+            SELECT c FROM Consulta c WHERE DATE(data) = :data AND ativo = true ORDER BY data ASC
             """)
     List<Consulta> consultasDoDia(LocalDate data);
 
