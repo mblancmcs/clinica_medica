@@ -1,6 +1,6 @@
 # Clinica médica
 
-Projeto pessoal / API Rest de uma clinica médica, para praticar Spring Boot e Spring Data JPA com Hibernate.
+Projeto pessoal / API Rest de uma clinica médica, para praticar Spring Boot e Spring Data JPA com o ORM Hibernate.
 
 ## Stack
 - Java 17: versão Long-term Support (LTS) até aproximadamente setembro de 2029.
@@ -70,7 +70,7 @@ java -Dspring.profiles.active=prod -DDATASOURCE_URL=jdbc:mysql://localhost:3306/
 - o "-Dspring.profiles.active=prod" é para executar o projeto em sua versão de produção;
 - é necessário alterar o valor das variáveis de ambiente "DATASOURCE_USERNAME" e "DATASOURCE_PASSWORD" para respectivamente, o nome e senha configurados do banco de dados MySQL.
 - na variável de ambiente "DATASOURCE_URL", conferir se a porta do banco de dados MySQL é a padrão 3306 ou se será preciso alterar no comando acima para a configurada no servidor.
-- o TomCat utiliza a porta padrão 8080 para execução da API.
+- o Tomcat utiliza a porta padrão 8080 para execução da API.
 - ao fazer login, é necessário informar o "Bearer Token" / JWT recebido na resposta, no cabeçalho "Authorization" da requisição;
 - ao executar a aplicação, é possível fazer os testes e entender melhor como a API funciona através do Swagger, pelo endereço: http://localhost:8080/swagger-ui/index.html
 
@@ -79,9 +79,9 @@ Usuário: admin
 
 Senha: 123456
 
-- Ao acessar com o usuário adminsitrador, é possível listar os usuários cadastrados ou cadastrar novos com as seguintes acessos: "ATENDENTE", "MEDICO" ou "ADMIN".
-- O atendente terá acesso ao cadastro de consultas e pacientes.
-- O médico terá acesso apenas aos atendimentos, que virá com informações das referentes consultas e do paciente.
+- Ao acessar com o usuário administrador, é possível listar os usuários cadastrados ou cadastrar novos com os seguintes acessos: "ATENDENTE", "MEDICO" ou "ADMIN".
+- O atendente terá acesso aos controllers de consultas e pacientes.
+- O médico terá acesso apenas aos atendimentos, que virão com informações da referente consulta e do paciente.
 - O administrador / ADMIN terá acesso total ao sistema.
 
 ### MER - Banco de dados
