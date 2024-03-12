@@ -37,7 +37,7 @@ class ConsultaRepositoryTest {
         var planosParticular = PlanosParticular.PARTICULAR;
         var horarioConsulta = LocalDateTime.now().withDayOfMonth(10).withMonth(12).withYear(2023)
                 .withHour(14).withMinute(0).withSecond(0);
-        var consulta = new Consulta(new DadosCadastroConsulta(planosParticular, horarioConsulta, null, 1, "Dor de cabeca"), paciente);
+        var consulta = new Consulta(new DadosCadastroConsulta(planosParticular, horarioConsulta, 1,  "Dor de cabeca"), paciente);
         em.persist(consulta);
 
         assertThat(consultaRepository.consultasDoDia(horarioConsulta.toLocalDate())).isNotNull();

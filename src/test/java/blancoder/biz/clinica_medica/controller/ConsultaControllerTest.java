@@ -65,7 +65,7 @@ class ConsultaControllerTest {
     void agendarCenario2() throws Exception {
         var planosParticular = PlanosParticular.PARTICULAR;
         // mudar abaixo de acordo com o horario da consulta esperado
-        var horarioConsulta = LocalDateTime.now().withDayOfMonth(10).withMonth(12).withYear(2023)
+        var horarioConsulta = LocalDateTime.now().withDayOfMonth(10).withMonth(12).withYear(2024)
                 .withHour(14).withMinute(0).withSecond(0);
 
         List<String> telefone = new ArrayList<>();
@@ -83,7 +83,7 @@ class ConsultaControllerTest {
                 post("/consulta")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dadosCadastroConsultaJson
-                                .write(new DadosCadastroConsulta(planosParticular, horarioConsulta, null, 1, "Dor de cabeca"))
+                                .write(new DadosCadastroConsulta(planosParticular, horarioConsulta, 1, "Dor de cabeca"))
                                 .getJson())
         ).andReturn().getResponse();
 
@@ -118,7 +118,7 @@ class ConsultaControllerTest {
                 post("/consulta/no_dia")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dadosCadastroConsultaJson
-                                .write(new DadosCadastroConsulta(planosParticular, null, null, 1, "Dor de cabeca"))
+                                .write(new DadosCadastroConsulta(planosParticular, null, 1, "Dor de cabeca"))
                                 .getJson())
         ).andReturn().getResponse();
 
