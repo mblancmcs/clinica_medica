@@ -2,13 +2,11 @@ package blancoder.biz.clinica_medica.domain.consulta;
 
 import blancoder.biz.clinica_medica.domain.paciente.DadosListagemPaciente;
 import blancoder.biz.clinica_medica.domain.paciente.Paciente;
-import blancoder.biz.clinica_medica.domain.paciente.PacienteRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -38,7 +36,6 @@ public class Consulta {
 
     public Consulta(DadosCadastroConsulta dados, Paciente paciente) {
         this.data = dados.data();
-        this.senha = dados.senha();
         this.motivo = dados.motivo();
         this.planoParticular = dados.planoParticular();
         this.ativo = true;

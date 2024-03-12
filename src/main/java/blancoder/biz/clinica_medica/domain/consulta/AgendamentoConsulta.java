@@ -85,7 +85,10 @@ public class AgendamentoConsulta {
                 contador++;
             }
         } else {
-            if(LocalDateTime.now().isBefore(LocalDateTime.now().withHour(horarioAtual).withMinute(30)) &&
+            if(LocalDateTime.now().isBefore(LocalDateTime.now().withHour(horarioInicial))) {
+                horaLivre = 8;
+                senha++;
+            } else if(LocalDateTime.now().isBefore(LocalDateTime.now().withHour(horarioAtual).withMinute(30)) &&
                     LocalDateTime.now().getHour() != horarioAlmoco) {
                 horaLivre = LocalDateTime.now().getHour();
                 //minutos = 30;

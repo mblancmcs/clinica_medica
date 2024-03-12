@@ -27,11 +27,13 @@ public class Usuario implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private Boolean ativo;
 
     public Usuario(String login, String password, UserRole role) {
         this.login = login;
         this.password = password;
         this.role = role;
+        this.ativo = true;
     }
 
     @Override
@@ -50,6 +52,22 @@ public class Usuario implements UserDetails {
     @Override
     public String getUsername() {
         return this.login;
+    }
+
+    public Integer getId() { return this.id; }
+
+    public void setPassword(String password) { this.password = password; }
+
+    public void setRole(UserRole role) { this.role = role; }
+
+    public void exclusaoLogica() { this.ativo = false; }
+
+    public void atualizarDados(String senha, UserRole role) {
+        if(senha != null) {
+            this.password = senha;
+        } if(role != null) {
+            this.role = role;
+        }
     }
 
     @Override

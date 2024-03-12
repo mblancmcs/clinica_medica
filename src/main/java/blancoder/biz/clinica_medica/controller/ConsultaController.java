@@ -22,7 +22,6 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/consulta")
 @SecurityRequirement(name = "bearer-key")
-@Secured("ROLE_ATENDENTE")
 public class ConsultaController {
 
     @Autowired
@@ -34,6 +33,7 @@ public class ConsultaController {
     @Autowired
     private AgendamentoConsulta agendamentoConsulta;
 
+    @Secured("ROLE_ATENDENTE")
     @PostMapping
     @Transactional
     public ResponseEntity agendarAntecipado(@RequestBody @Valid DadosCadastroConsulta dados, UriComponentsBuilder uriBuilder) {
@@ -43,6 +43,7 @@ public class ConsultaController {
         return ResponseEntity.created(uri).body(agendamento);
     }
 
+    @Secured("ROLE_ATENDENTE")
     @PostMapping("/no_dia")
     @Transactional
     public ResponseEntity agendarMesmoDia(@RequestBody @Valid DadosCadastroConsulta dados, UriComponentsBuilder uriBuilder) {
@@ -51,20 +52,23 @@ public class ConsultaController {
         return ResponseEntity.created(uri).body(agendamento);
     }
 
+    @Secured({"ROLE_MEDICO", "ROLE_ATENDENTE"})
     @GetMapping
-    public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+    public ResponseEntity<Page<DadosListagemConsulta>> listar(@PageableDefault(size = 10, sort = "data", direction = Sort.Direction.DESC)
                                                                   Pageable paginacao) {
         var pagConsulta = consultaRepository.findAllByAtivoTrue(paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
+    @Secured({"ROLE_MEDICO", "ROLE_ATENDENTE"})
     @GetMapping("/cpf={cpf}")
-    public ResponseEntity<Page<DadosListagemConsulta>> listarPorCpf(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+    public ResponseEntity<Page<DadosListagemConsulta>> listarPorCpf(@PageableDefault(size = 10, sort = "data", direction = Sort.Direction.DESC)
                                                                        Pageable paginacao, @PathVariable Long cpf) {
-        var pagConsulta = consultaRepository.findAllByPacienteCpf(cpf, paginacao).map(DadosListagemConsulta::new);
+        var pagConsulta = consultaRepository.consultaPorCpf(cpf, paginacao).map(DadosListagemConsulta::new);
         return ResponseEntity.ok(pagConsulta);
     }
 
+    @Secured({"ROLE_ATENDENTE", "ROLE_MEDICO"})
     @GetMapping("/data={data}")
     public ResponseEntity<Page<DadosListagemConsulta>> listarPorData(@PageableDefault(size = 10, sort = "data", direction = Sort.Direction.ASC)
                                                                       Pageable paginacao, @PathVariable LocalDate data) {
@@ -76,6 +80,7 @@ public class ConsultaController {
         return ResponseEntity.ok(pagConsulta);
     }
 
+    @Secured("ROLE_ATENDENTE")
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizarConsulta dados) {
@@ -87,6 +92,7 @@ public class ConsultaController {
         return ResponseEntity.ok(new DadosListagemConsulta(consulta));
     }
 
+    @Secured("ROLE_ATENDENTE")
     @DeleteMapping("/id={id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {

@@ -1,5 +1,6 @@
 package blancoder.biz.clinica_medica.controller;
 
+import blancoder.biz.clinica_medica.domain.ValidacaoException;
 import blancoder.biz.clinica_medica.domain.paciente.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public class PacienteController {
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroPaciente dados, UriComponentsBuilder uriBuilder) {
+        if(repository.existsByCpfAndAtivoTrue(dados.cpf())) {
+            throw new ValidacaoException("Paciente já cadastrado");
+        }
         var paciente = new Paciente(dados);
         repository.save(paciente);
 
@@ -48,6 +52,21 @@ public class PacienteController {
         }
     }
 
+    @GetMapping("/cpf={cpf}")
+    public ResponseEntity listarPorCpf(@PathVariable Long cpf) {
+        Paciente paciente = repository.findByCpfAndAtivoTrue(cpf);
+        if(paciente != null) {
+            return ResponseEntity.ok(new DadosListagemPaciente(paciente));
+        }
+        return ResponseEntity.badRequest().body("Paciente nao encontrado");
+    }
+
+    @GetMapping("/pacientes_cpf={cpf}")
+    public ResponseEntity listarPacientesPorCpf(@PathVariable Long cpf, @PageableDefault(size=10, sort="nome") Pageable paginacao) {
+        var page = repository.pacientePorCpf(cpf, paginacao).map(DadosListagemPaciente::new);
+        return ResponseEntity.ok(page);
+    }
+
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizarPaciente dados) {
@@ -60,7 +79,6 @@ public class PacienteController {
         }
     }
 
-    @Secured("ROLE_ATENDENTE")
     @DeleteMapping("/id={id}")
     @Transactional
     public ResponseEntity exclusaoLogica(@PathVariable Integer id) {

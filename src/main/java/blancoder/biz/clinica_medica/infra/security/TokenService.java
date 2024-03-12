@@ -24,7 +24,8 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("api-clinica-medica") // autor / quem esta gerando o token
                     .withSubject(usuario.getLogin()) // passando / armazenando o usuario que esta fazendo o login
-                    //.withClaim("id", usuario.getId()) // opcional, para enviar o que for necessario
+                    .withClaim("id", usuario.getId())
+                    .withClaim("role", usuario.getRole().toString()) // opcional, para enviar o que for necessario
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){

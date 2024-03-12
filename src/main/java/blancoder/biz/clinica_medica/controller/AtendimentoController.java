@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/atendimento")
@@ -26,7 +29,7 @@ public class AtendimentoController {
     private AtendimentoRepository repository;
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemAtendimento>> listar(@PageableDefault(size = 10, sort = "consulta.data", direction = Sort.Direction.ASC)
+    public ResponseEntity<Page<DadosListagemAtendimento>> listar(@PageableDefault(size = 10, sort = "consulta.data", direction = Sort.Direction.DESC)
                                                                      Pageable paginacao) {
         var pagAtendimento = repository.findAllByAtivoTrue(paginacao).map(DadosListagemAtendimento::new);
         return ResponseEntity.ok(pagAtendimento);
@@ -34,8 +37,18 @@ public class AtendimentoController {
 
     @GetMapping("/cpf={cpf}")
     public ResponseEntity<Page<DadosListagemAtendimento>> listarPorCpf(@PathVariable Long cpf, @PageableDefault(size = 10,
-    sort = "id", direction = Sort.Direction.DESC) Pageable paginacao) {
-        var pagAtendimento = repository.findAllByConsultaPacienteCpfAndAtivoTrue(cpf, paginacao).map(DadosListagemAtendimento::new);
+    sort = "consulta.data", direction = Sort.Direction.DESC) Pageable paginacao) {
+        var pagAtendimento = repository.atendimentosPorCpf(cpf, paginacao).map(DadosListagemAtendimento::new);
+        return ResponseEntity.ok(pagAtendimento);
+    }
+
+    @GetMapping("/data={data}")
+    public ResponseEntity<Page<DadosListagemAtendimento>> listarPorData(@PathVariable LocalDate data, @PageableDefault(size = 10,
+        sort = "consulta.data", direction = Sort.Direction.ASC) Pageable paginacao) {
+        var atendimentosDoDia = repository.atendimentosDoDia(data);
+        int start = (int) paginacao.getOffset();
+        int end = Math.min((start + paginacao.getPageSize()), atendimentosDoDia.size());
+        Page<DadosListagemAtendimento> pagAtendimento = new PageImpl<>(atendimentosDoDia.subList(start, end), paginacao, atendimentosDoDia.size()).map(DadosListagemAtendimento::new);
         return ResponseEntity.ok(pagAtendimento);
     }
 

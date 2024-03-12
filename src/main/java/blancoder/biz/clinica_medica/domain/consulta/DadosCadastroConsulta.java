@@ -1,6 +1,5 @@
 package blancoder.biz.clinica_medica.domain.consulta;
 
-import blancoder.biz.clinica_medica.domain.paciente.Paciente;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +11,6 @@ public record DadosCadastroConsulta(
         PlanosParticular planoParticular,
         @Future
         LocalDateTime data,
-        Integer senha,
         @NotNull
         Integer idPaciente,
         @NotBlank
