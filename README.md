@@ -1,4 +1,4 @@
-# E-Library
+# Clínica médica
 
 Projeto inicial / API Rest de uma clínica médica desenvolvido em Java, Spring Boot, Hibernate como implementação do Spring Data JPA e Spring Security para controle de acesso de usuários.
 
